@@ -1,5 +1,5 @@
 import argparse
-from langchain.vectorstores.chrome import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain.prompts import ChatPromptTemplate
 from langchain_community.llms.ollama import Ollama
 
@@ -16,3 +16,20 @@ Answer the question based only on the following context:
 
 Answer the question based on the above context {question}
 """
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('question', type=str, help='The question')
+    args = parser.parse_args()
+    question = args.question
+
+def query_rag(question, context):
+    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=get_embeddings())
+    model = Ollama(model='llama:7b')
+
+    prompt = ChatPromptTemplate(PROMPT_TEMPLATE)
+    prompt = prompt.render(context=context, question=question)
+
+    response = model.invoke(prompt)
+
+    return response

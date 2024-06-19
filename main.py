@@ -1,11 +1,11 @@
 import argparse
 import os
 import shutil
-from langchain.document_loaders.pdf import PyPDFDirectoryLoader
+from langchain_community.document_loaders.pdf import PyPDFDirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.schema.document import Document
 from embeddings import get_embeddings
-from langchain.vectorstores.chroma import Chroma
+from langchain_community.vectorstores import Chroma
 
 CHROMA_PATH='chroma'
 DATA_PATH='../data'
@@ -15,6 +15,7 @@ def main():
     parser.add_argument('--reset', action='store_true', help='Reset the vector database')
     parser.add_argument('pdf_dir', help='Directory of PDFs')
     args = parser.parse_args()
+
     if args.reset:
         print('Resetting vector database')
         reset_vector_db()
@@ -34,8 +35,7 @@ def load_documents(pdf_dir):
 def split_documents(documents):
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
-        max_chunks=1000,
-        chunk_overlap=150,
+        chunk_overlap=150
     )
     documents = splitter.split_documents(documents)
 
@@ -43,12 +43,11 @@ def split_documents(documents):
 
 
 def add_documents_to_vector_db(chunks):
-
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=get_embeddings())
 
     for chunk in chunks:
         db.add_document(chunk)
-        db.persist()
+    db.persist()
 
 
 def reset_vector_db():
