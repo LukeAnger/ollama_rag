@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  ollama_rag:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes: 
+      - .:/app
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+    command: /app/main.py
