@@ -28,8 +28,6 @@ def main():
 def query_rag(question):
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=get_embeddings())
 
-    all_docs = db.get()
-    # print("All documents:", all_docs)
     model = Ollama(model='llama3')
 
     sim_search = db.similarity_search_with_score(question, k=10)

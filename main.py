@@ -47,15 +47,18 @@ def split_documents(documents):
 
 def add_documents_to_vector_db(chunks):
     print("Adding documents to vector database")
-    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=get_embeddings(chunks))
+    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=get_embeddings())
+    chunks = chunks[:50]
     chunks = assign_chunk_ids(chunks)
-    print("LENGTH OF CHUNKS: ", len(chunks))
-    #batch add documents
-    # for i in range(0, len(chunks), 10):
-    #     db.add_documents(chunks[i:i+100], ids=[c.metadata['id'] for c in chunks[i:i+100]])
-    #     print("Added documents:", db.get())
 
-    print("Added documents final:", db.get())
+    #batch add documents
+    for i in range(0, len(chunks), 10):
+        db.add_documents(chunks[i:i+100], ids=[c.metadata['id'] for c in chunks[i:i+100]])
+        # print("Added documents:", db.get())
+
+    all_docs = db.get().documents
+    print("Added documents:", all_docs[0])
+    print("Added documents final:", len(all_docs))
 
 def assign_chunk_ids(chunks):
     for i, chunk in enumerate(chunks):

@@ -2,6 +2,8 @@ from langchain_community.vectorstores import Chroma
 
 def get_all_docs():
     db = Chroma(persist_directory='chroma')
-    return db.get()
+    query = db.get()
+    return query
 
-print(get_all_docs())
+print("DICT KEYS: ", get_all_docs().keys())
+print("DOCUMENTS: ", get_all_docs()['documents'])
