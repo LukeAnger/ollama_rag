@@ -30,14 +30,15 @@ def query_rag(question):
 
     model = Ollama(model='llama3')
 
-    sim_search = db.similarity_search_with_score(question, k=10)
+    sim_search = db.similarity_search_with_score(question, k=25)
     print("Similarity search results:", sim_search)
 
-    context = sim_search[0][0].page_content
-
-    # context = ''
-    # for i in range(0, len(sim_search)):
-    #     context += sim_search[i][0].page_content + ' '
+    # context = sim_search[0][0].page_content
+    # concat first 5 of sim search
+    context = ''
+    for i in range(0, 5):
+        context += sim_search[i][0].page_content + ' '
+    
 
     print("---------------------------------------------------------------------------------------------------------------------------------------------------------")
 

@@ -1,6 +1,7 @@
 import argparse
 import os
 import shutil
+# pip install langchain langchain-community langchain-text-splitters chromadb pypdf 
 from langchain_community.document_loaders.pdf import PyPDFDirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.schema.document import Document
@@ -24,21 +25,21 @@ def main():
     documents = load_documents(args.pdf_dir)
     chunks = split_documents(documents)
     add_documents_to_vector_db(chunks)
+    print("Finished main")
 
 
 def load_documents(pdf_dir):
     print("Loading documents")
     document_loader = PyPDFDirectoryLoader(pdf_dir)
     documents = document_loader.load()
-
     return documents
 
 
 def split_documents(documents):
     print("Splitting documents")
     splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=100
+        chunk_size=1024,
+        chunk_overlap=128
     )
     documents = splitter.split_documents(documents)
 
@@ -48,17 +49,15 @@ def split_documents(documents):
 def add_documents_to_vector_db(chunks):
     print("Adding documents to vector database")
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=get_embeddings())
-    chunks = chunks[:50]
+    # chunks = chunks[:50] # use this to test on a subset of the data
     chunks = assign_chunk_ids(chunks)
-
+    print("Adding documents:", len(chunks))
     #batch add documents
     for i in range(0, len(chunks), 10):
-        db.add_documents(chunks[i:i+100], ids=[c.metadata['id'] for c in chunks[i:i+100]])
-        # print("Added documents:", db.get())
+        print("Adding documents:", i, chunks[i])
+        db.add_documents(chunks[i:i+10], ids=[c.metadata['id'] for c in chunks[i:i+10]])
 
-    all_docs = db.get().documents
-    print("Added documents:", all_docs[0])
-    print("Added documents final:", len(all_docs))
+    # all_docs = db.get().documents
 
 def assign_chunk_ids(chunks):
     for i, chunk in enumerate(chunks):

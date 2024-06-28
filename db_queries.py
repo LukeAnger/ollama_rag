@@ -5,5 +5,5 @@ def get_all_docs():
     query = db.get()
     return query
 
-print("DICT KEYS: ", get_all_docs().keys())
-print("DOCUMENTS: ", get_all_docs()['documents'])
+# print("DICT KEYS: ", get_all_docs().keys())
+print("DOCUMENTS: ", get_all_docs()['documents'][:5])

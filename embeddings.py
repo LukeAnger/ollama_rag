@@ -6,7 +6,7 @@
 from langchain_nomic.embeddings import NomicEmbeddings
 
 def get_embeddings():
-    # embeddings = OllamaEmbeddings(model='llama2')
+    # embeddings = OllamaEmbeddings(model='llama3')
 
     # bedrock_client = boto3.client(
     #     service_name='bedrock_runtime', 
