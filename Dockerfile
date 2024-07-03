@@ -1,6 +1,13 @@
 FROM python:3.9-buster
 WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["python", "main.py"]
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    software-properties-common \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+RUN git clone https://github.com/LukeAnger/ollama_rag.git .
+RUN pip3 install -r requirements.txt
+EXPOSE 8501
+HEALTHCHECK CMD curl -f http://localhost:8501/_stcore/health
+ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]

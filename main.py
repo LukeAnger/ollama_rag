@@ -68,8 +68,6 @@ def assign_chunk_ids(chunks):
 
     return chunks
 
-
-
 def reset_vector_db():
     if os.path.exists(CHROMA_PATH):
         shutil.rmtree(CHROMA_PATH)
