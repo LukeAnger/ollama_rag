@@ -4,7 +4,8 @@ from langchain_community.llms.ollama import Ollama
 
 from embeddings import get_embeddings
 
-CHROMA_PATH='chroma'
+CHROMA_PATH='chroma_hf'
+# CHROMA_PATH='chroma'
 
 PROMPT_TEMPLATE = """
 Answer the question based only on the following context:
@@ -24,7 +25,7 @@ def reset_vector_db():
 
 def main():
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=get_embeddings())
-    model = Ollama(model='llama3')
+    model = Ollama(model='llama3:instruct')
     
     while True:
         question = input("Enter your question: ")
@@ -35,6 +36,8 @@ def main():
         # concat first 5 of sim search
         context = ''
         for i in range(0, 5):
+            print("Context:", sim_search[i][0].page_content)
+            print("---------------------------------------------------------------------------------------------------------------------------------------------------------")
             context += sim_search[i][0].page_content + ' '
         
 
@@ -44,6 +47,8 @@ def main():
 
         prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
         prompt = prompt_template.format(context=context, question=question)
+
+        print("Prompt:", prompt)
 
         response = model.invoke(prompt)
         print("Response:", response)

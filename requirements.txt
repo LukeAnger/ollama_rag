@@ -3,3 +3,4 @@ langchain-community
 langchain-nomic
 chromadb
 pypdf
+streamlit

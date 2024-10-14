@@ -3,7 +3,9 @@
 # import boto3
 # from langchain_community.embeddings.bedrock import BedrockEmbeddings
 
-from langchain_nomic.embeddings import NomicEmbeddings
+# from langchain_nomic.embeddings import NomicEmbeddings
+
+from langchain_huggingface  import HuggingFaceEmbeddings
 
 def get_embeddings():
     # embeddings = OllamaEmbeddings(model='llama3')
@@ -17,6 +19,8 @@ def get_embeddings():
     #     region_name='us-east-1',
     #     )
     
-    embeddings = NomicEmbeddings(model="nomic-embed-text-v1.5")
+    # embeddings = NomicEmbeddings(model="nomic-embed-text-v1.5")
+
+    embeddings = HuggingFaceEmbeddings()
 
     return embeddings

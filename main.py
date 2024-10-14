@@ -8,7 +8,7 @@ from langchain.schema.document import Document
 from embeddings import get_embeddings
 from langchain_community.vectorstores import Chroma
 
-CHROMA_PATH='chroma'
+CHROMA_PATH='chroma_hf'
 DATA_PATH='../data'
 
 def main():
